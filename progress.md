@@ -194,3 +194,53 @@
 7. 11/6(금): 5단계 말로 설명하기(면접관 역할)
 8. 11/7(토): Next.js 판 올리기(10/28 정한 11/4에서 미룸). 노션 '할 일'에 새로 넣음
 - 뒤 일정도 같이 미룸(사용자: "지연된 만큼 미루면 돼, 진행 상황 따라 유동적으로"): BuildMind 끝 11/3 → 11/6(사흘)이라 SortTwin 11/7~11/14 · PreWash 11/15~11/21 · IDC 11/22~11/26으로 노션 수정
+
+---
+
+## 2026-10-31(토) — VS Code
+
+**일정 대비: 사흘 밀림(하루 더).** 오늘 몫은 `mqtt_client.py` 전체였는데 7묶음 중 ① 켜고 끄기 · ② 상태 2개만 끝(메서드 7/26). 깃허브 잔디용 노트 저장소 만들기(약 40분)와 `with self._lock:` 이해(연습 파일 3개, 비유로 다시)에 시간이 갔다. 새 일정은 아래 '다음에 할 것'(모두 하루씩 뒤로, 노션 반영 끝).
+
+### 오늘 한 것
+- 시작 점검: `study` 브랜치 · 작업 트리 깨끗 · origin push = `no_push`
+- **깃허브 잔디**: 포크(`hwang-injae/buildmind`)의 `study` 커밋은 잔디에 안 셈(포크 + 기본 브랜치 아님 + 커밋 이메일 `pm-sim@local`). → `study-notes/`를 **그 자체로 별도 저장소**로 만들어 공개 저장소 `hwang-injae/buildmind-study`(`main`)에 올림. 이 폴더만 커밋 이름 `hwang-injae` · 이메일 깃허브 대리 주소(`280895779+hwang-injae@users.noreply.github.com` — 진짜 메일은 push가 GH007로 거절됨). 바깥 BuildMind 저장소는 이 폴더를 무시하니 안 섞임. 저장소 만들기 · remote 연결 · push는 내가 직접(gh repo create → git remote add → git push -u origin main). 잔디가 노란색 = 할로윈 테마(10/31 칸에 기여 2 확인)
+- **`__init__`(60~81)** 끝: 빈 상자(상태 · 그림 딕셔너리) · 자물쇠 · 스위치 만들고 paho에 콜백 3개 + 유언(`will_set`) 맡김. 연결은 아직 안 함
+- **`start`(84) 복습 · `stop`(91)**: 깨끗한 종료엔 유언이 안 나가서 `alive false`를 직접 보냄. 확인 질문(갑자기 뽑힘 → 브로커가, 정상 종료 → backend가) 맞힘
+- **② 상태**: `connected`(브로커) vs `bridge_connected`(다리)는 다른 질문. `_fresh` 조건 3개(마지막 안부 true · 받은 적 있음 · 지금 − 받은 시각 < 3초). `bridge_connected`/`_fresh`를 둘로 나눈 이유 = 잠금 안에서 또 잠그면 데드락(`practice/10_double_lock.py`). `snapshot`은 복사 직원
+- 연습 6개 만들고 돌림: `05_multi_assign.py`(4/4) · `06_with_lock.py`(일꾼 둘 → 잠금 없으면 1, 있으면 2) · `07_dict_while_iter.py`(RuntimeError 재현) · `08_or_value.py`(6/6) · `09_fresh.py`(5/5) · `10_double_lock.py`
+- 확인 질문 결과: `Lock()` 괄호 vs `_alive_loop` 괄호 없음 → 맞음 · `pending`/`seen`은 객체 → 맞음 · `client or make_mqtt_client` 77줄 → 1번 맞음, "누가 만들면 무엇이 들어가나"는 **방향 반대**(pytest = 가짜, app.py = 진짜) · `_fresh` "2초 전 안부 뒤 전원 뽑힘" → 거짓이라 답(정답 참, 1초 뒤 거짓) → 09 연습 뒤 5/5
+- `buildmind.md` '함수 설명 (내 말로)'에 `__init__` · `start` · `stop` 3개(내 말 + 한 단어씩 덧붙임)
+
+### 새로 배운 것 (`python-notes.md`에 정리)
+- `a, b = x, y` · `with 잠금:`(threading.Lock) · 딕셔너리 훑는 중 칸 추가 → RuntimeError · `A or B`를 값으로
+- 개념(노트엔 안 적음): 콜백(상대가 때가 되면 대신 부르는 함수) · 유언 LWT(갑자기 죽을 때만 브로커가 올림) · `threading.Event` 스위치 · `time.monotonic`(간격 재는 시계, 시험은 가짜 시계) · 데드락 · 겉 함수가 잠그고 속 함수는 계산만 · `global` · `t.join()`(연습용)
+
+### 모르는 것 (나올 때 기초부터)
+- 06 연습의 `global` · `join` · `fn.__name__`은 연습용으로만 넘김
+- 전부터: 데코레이터(`@staticmethod` · `@property` · `@contextmanager` · `@asynccontextmanager`) · lambda(시험 `clock=lambda: now[0]`에 나옴 — 11/1 `_fresh` 시험 볼 때) · `**fields`/`**kw`(169 · 302 · 327줄) · `uuid.uuid4()`(167) · argparse · `functools.partial` · ROS 2 용어 · `design_store` 글자들
+
+### 고친 것
+- 코드 수정 없음. BuildMind `study` 브랜치 깨끗
+- 노트: `progress.md` 이 칸 · `python-notes.md` 4줄 · `buildmind.md` 함수 설명 3개 · `practice/05~10` · `teacher.md` '정한 것' 1줄 · 노트 저장소 `README.md` · `.gitignore`
+
+### 선생님 메모
+- **비유를 빼면 안 된다.** "비유보다 정확히"라고 요청받아 딕셔너리 · 스레드 이름으로 설명했더니 "비유를 안 하니 더 어렵다"고 됨. 비유(사무실 · 직원 셋 · 화이트보드 · 자물쇠) 하나로 끝까지 일관되게 가고, 정확한 이름은 짝짓기 표로 붙인다
+- **가정 예시는 실제와 섞이면 혼란.** "`_on_blob` 둘이 동시에"는 실제로 안 일어나는 상황인데 연습과 맞추려 그렸다가 질문 2개를 만들었다. 예시는 **실제로 부딪히는 짝**(paho 쓰기 vs snapshot 읽기)으로만
+- **연습 파일에 새 글자 3개(`global` · `join` · `__name__`) 들어가면 파일 자체가 막힌다.** 연습은 배우려는 문법 하나만 보이게, 장치가 필요하면 주석에 "연습용"이라 적기
+- 방향 반대로 답하는 패턴 또 1번(pytest/app.py). 표로 "누가 → 무엇"을 먼저 보여 주고 묻기
+- 확인 질문은 **비유로 먼저 답하게** 하고 숫자 · 이름은 그 뒤에. 09처럼 숫자를 직접 넣는 연습은 바로 먹혔다
+- 세션 끝 순서(10/31부터): progress.md → 노션 일정 → `study-notes/`에서 커밋(Claude) → `git push` 명령 알려 주기(사용자가 침) → 잔디 1칸
+
+### 멈춘 곳
+- `mqtt_client.py` 7묶음 중 ① ② 끝. ③ 콜백(`_on_connect` 129 · `_on_disconnect` 138 · `_on_message` 194) 시작 전
+
+### 다음에 할 것 (새 일정, 모두 하루씩 뒤로 — 노션 반영 끝)
+1. 11/1(일): `mqtt_client.py` ③ 콜백 → ④ 살아있음 → ⑤ 웹→로봇 → ⑥ 소식 처리 → ⑦ `_emit`. `_on_message`에서 '이상한 코드' 2개(try 밖 `_on_blob` · 미리보기 길, 218줄 조용한 except)를 '이상한 코드' 순서로. 끝나면 ③~⑦ 함수 설명 내 말로
+2. 11/2(월): `bridge_codec.py`
+3. 11/3(화): `design_store.py`
+4. 11/4(수): `design_gen.py` · `claude_bridge.py`
+5. 11/5(목): 로보월드 — 공부 없음
+6. 11/6(금): `bridge_node.py`(`colcon build` 먼저) + 4단계(함수 하나 다시 써 보기)
+7. 11/7(토): 5단계 말로 설명하기(면접관 역할)
+8. 11/8(일): Next.js 판 올리기
+- 뒤 일정 하루씩: SortTwin 11/8~11/15 · PreWash 11/16~11/22 · IDC 11/23~11/27(노션 수정 끝)

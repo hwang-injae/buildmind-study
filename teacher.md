@@ -12,6 +12,9 @@
 - (10/28) 로봇 PC는 이제 없다(수료). 그래서 원래 규칙 '로봇 PC에서만 확인할 수 있는 코드는 적어만 둔다'를 이렇게 바꾼다: `bridge_node.py`도 고칠 수 있다. 다만 ① 이 PC의 ROS 2 jazzy로 `colcon build`(d2_interfaces · d2_bridge)를 먼저 하고, ② 상대편(작업 관리자)이 없으니 간단한 시험만 한다(pytest, 필요하면 작은 가짜 ROS 서비스), ③ 커밋 글과 `buildmind.md`에 '수료 후 로봇 없음 — 수정은 했고 실기 검증은 못 함'을 적는다. 면접에서도 그대로 말한다. 로봇 동작 · 안전 타이밍처럼 실기로만 알 수 있는 것은 여전히 `buildmind.md`에 적어만 둔다.
 - (10/30) 일정이 이틀 밀렸다(10/29 쉼 + 2단계에 질문이 깊어 이틀). 3단계부터 모두 이틀씩 뒤로: 10/31 mqtt_client → 11/1 bridge_codec → 11/2 design_store → 11/3 design_gen · claude_bridge → 11/4 bridge_node + 4단계 → 11/5 로보월드(공부 없음) → 11/6 5단계 → 11/7 Next.js(위 11/4에서 미룸). 노션 일정표도 같이 고침. **일정은 진행 상황에 따라 유동적으로** — 밀리면 뒤 일정(SortTwin · PreWash · IDC)도 같은 만큼 미뤄서 노션에 반영한다(10/30 정함).
 
+- (10/31) **깃허브 잔디**: 공부 노트 `study-notes/`는 그 자체로 별도 git 저장소(`main`)이고 공개 저장소 `hwang-injae/buildmind-study`에 올린다(포크 `study` 커밋은 잔디에 안 셈). 이 폴더만 커밋 이름 `hwang-injae` · 이메일 깃허브 대리 주소. 세션 끝("오늘은 여기까지") 순서: progress.md → 노션 일정 → `study-notes/`에서 Claude가 커밋 → `git push` 명령을 알려 주면 내가 직접 친다. 바깥 BuildMind 저장소 설정(`pm-sim`)은 건드리지 않는다.
+- (10/31) 일정 하루 더 밀림(mqtt_client 2/7 묶음). 11/1 mqtt_client 나머지 → 11/2 bridge_codec → 11/3 design_store → 11/4 design_gen · claude_bridge → 11/5 로보월드 → 11/6 bridge_node + 4단계 → 11/7 5단계 → 11/8 Next.js. SortTwin 11/8~ · PreWash 11/16~ · IDC 11/23~. 노션 반영 끝.
+
 ---
 
 아래는 10/26에 처음 붙여 넣은 공부 규칙 그대로다.

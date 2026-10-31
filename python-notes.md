@@ -14,6 +14,10 @@
 | `A if 조건 else B` | 한 줄짜리 if. 조건이 참이면 A, 아니면 B를 값으로. | `bridge_codec.py:29` `ros_name[1:] if ros_name.startswith('/') else ros_name` |
 | `글자[1:]` · `글자.startswith('/')` | 글자 자르기: 0번부터 세고 `[1:]`은 1번부터 끝까지(첫 글자 떼기). `startswith`는 그 글자로 시작하면 참. | `bridge_codec.py:29` ROS 이름 `/d2/…`의 맨 앞 `/` 떼기 |
 | 상속 `class 자식(부모):` | 괄호 안 부모의 메서드를 다 물려받고, 자식이 다시 적은 메서드만 바꿔 끼운다. 부모 메서드 안의 `self.메서드()`는 **점 앞 물건이 누구냐**로 찾는다(자식 먼저, 없으면 부모). 어디에 적혀 있느냐는 상관없다. | `design_store.py:572` `class PgDesignStore(DesignStore):`. 부모 `get_design`(128) 안의 `self._load()`가 Pg판 물건이면 Pg `_load`(624, DB 읽기), JSON판이면 JSON `_load`(485, 파일 읽기). 연습 `practice/04_inherit.py` |
+| `a, b = x, y` (여러 개 한꺼번에 넣기) | 왼쪽 이름들과 오른쪽 값들을 순서대로 짝지어 한 줄에 넣는다. 오른쪽을 **먼저 다 계산**한 뒤 넣으므로 `a, b = b, a`는 임시 변수 없이 서로 바꾸기. | `mqtt_client.py:62` `self.host, self.port = host, int(port)` · 70 · 264. 연습 `practice/05_multi_assign.py`(4/4 맞힘) |
+| `with 잠금:` (`threading.Lock()`) | 스레드가 여럿일 때 같은 딕셔너리를 **베끼는 일과 새 칸 붙이는 일이 동시에 일어나지 않게** 줄 세운다. `with` 줄에 온 스레드는 잠겨 있으면 거기서 기다리고, 안의 스레드가 들여쓰기를 나오면(에러가 나도) 자동으로 풀린다. 만지는 **모두가 같은 자물쇠**를 써야 효과 있음. 잠금 안에는 꼭 필요한 몇 줄만. `with open(...)`과 같은 문법(들어갈 때 열고 나올 때 반드시 닫기). | `mqtt_client.py:68` `self._lock = threading.Lock()` · `snapshot` 122(베끼기) · `_on_blob` 262(붙이기) 등 10번. 안 잠그면 `snapshot` 123이 `self.state`를 훑는 중 `_on_blob` 270이 칸을 추가 → `RuntimeError: dictionary changed size during iteration`. 연습 `practice/06_with_lock.py`(일꾼 둘 → 잠금 없으면 1, 있으면 2) · `07_dict_while_iter.py`(에러 재현). 06의 `global` · `t.join()`(끝날 때까지 기다림) · `fn.__name__`은 연습용 장치 |
+| 딕셔너리 훑는 중 칸 추가 | `for k in 딕셔너리:`로 훑는 도중에 새 키를 넣으면 `RuntimeError: dictionary changed size during iteration`. 스레드 하나로도 난다. | `practice/07_dict_while_iter.py`. BuildMind에서는 잠금으로 막음(위 줄) |
+| `A or B` 를 값으로 쓰기 | `or`는 참/거짓이 아니라 **두 값 중 하나를 그대로** 돌려준다: A가 비어 있지 않으면 A, 비어 있으면(`None` · `0` · `""` · `[]` · `{}` · `False`) B. `if` 안에서 "A 또는 B가 참"으로 쓰이는 것도 같은 규칙의 결과. "안 줬으면 기본으로 만들어라" 패턴. | `mqtt_client.py:77` `self.client = client or make_mqtt_client(CLIENT_ID)` — pytest가 `client=FakePaho()`를 주면 가짜, `app.py:108`은 안 주니(`None`) 진짜 paho. `app.py:108` `mqtt = mqtt or MqttClient(...)`도 같은 꼴. 연습 `practice/08_or_value.py`(6/6 맞힘) |
 
 ## 명령 · 도구
 

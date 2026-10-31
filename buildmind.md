@@ -78,6 +78,15 @@ AI(Claude)에게 설계를 만들어 달라고 **묻는 한 곳**. 로봇 없음
 
 ## 함수 설명 (내 말로)
 
+### `web/backend/mqtt_client.py`
+비유: `MqttClient` = 사무실. 화이트보드 `self.state`(칸마다 마지막 소식 한 장) · 서랍 `self._blobs`(그림 바이트) · 자물쇠 `self._lock`. 직원 셋 = paho 소식 스레드(우편) · `_alive_loop` 스레드(안부) · 화면 요청 스레드(복사 = `snapshot`).
+
+| 함수 | 내 말 (10/31) |
+|---|---|
+| `__init__`(60) | 처음에 틀을 만들어 준다 — 빈 상자(상태 · 그림 딕셔너리) · 자물쇠 · 스위치를 만들고, paho에 콜백 3개(붙음 · 끊김 · 소식)와 유언(`will_set`: 갑자기 죽으면 브로커가 `alive false`를 대신 올림)을 맡겨 둔다. 연결은 아직 안 함. `client or make_mqtt_client(...)` = 시험이 가짜를 주면 가짜, app.py는 안 주니 진짜 paho |
+| `start`(84) | 브로커에 붙기 시작(기다리지 않음, `connect_async`)하고 직원 둘 출근: paho 소식 스레드(`loop_start`) · 안부 스레드(`_alive_loop`). 끊기면 paho가 1~5초 간격으로 다시 붙음 |
+| `stop`(91) | 안부 스레드에 "그만" 스위치(`_stop.set()`) → `alive false`를 **직접** 올림(인사하고 나가는 깨끗한 종료에는 유언이 안 나가서) → 최대 1초 기다림 → 끊고 paho 스레드 퇴근. 갑자기 뽑히면 브로커가, 정상 종료면 backend가 `false`를 올린다 |
+
 ## 고치고 싶은 것
 - [ ] **Next.js 16.4.0 보안 경고** (`web/frontend/package.json:14` `"next": "16.4"`). 10/26 `npm ci` 때 16.0.0 ~ 16.4.0 critical 3건(이미지 최적화 · Server Actions · `use cache`). 셋 다 Next.js 서버 기능인데 BuildMind는 `next.config` `output: 'export'`라 Next.js 서버가 안 떠서 로컬 실행 영향 적음. 고치는 법: `npm audit`이 알려 주는 판으로 올림 → `npm install` → `npm run build` → 띄워서 화면 확인 → 커밋 → 내 포크에 push. 날짜는 미정(파이썬 6개 뒤).
 - [ ] **`mqtt_client.py:218` 깨진 소식을 조용히 버림** (`except (ValueError, KeyError, TypeError): pass`). 이 파일엔 로그가 한 줄도 없어서 로봇 PC가 깨진 JSON을 보내도 아무 흔적이 없다. 삼키는 것 자체는 맞음(안 삼키면 paho 1.6.1이 예외를 다시 던져 소식 받는 스레드가 죽음). 후보: `except … as e:` 뒤에 `log.warning(토픽, e)` 한 줄. README · docs 결정 기록에서 근거 못 찾음(10/30). `mqtt_client.py` 본 공부 때 '이상한 코드' 순서로 — `try:` 밖에 있는 `_on_blob` · 미리보기 길 문제와 같이.
