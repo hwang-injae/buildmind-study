@@ -14,6 +14,8 @@
 
 - (10/31) **깃허브 잔디**: 공부 노트 `study-notes/`는 그 자체로 별도 git 저장소(`main`)이고 공개 저장소 `hwang-injae/buildmind-study`에 올린다(포크 `study` 커밋은 잔디에 안 셈). 이 폴더만 커밋 이름 `hwang-injae` · 이메일 깃허브 대리 주소. 세션 끝("오늘은 여기까지") 순서: progress.md → 노션 일정 → `study-notes/`에서 Claude가 커밋 → `git push` 명령을 알려 주면 내가 직접 친다. 바깥 BuildMind 저장소 설정(`pm-sim`)은 건드리지 않는다.
 - (10/31) 일정 하루 더 밀림(mqtt_client 2/7 묶음). 11/1 mqtt_client 나머지 → 11/2 bridge_codec → 11/3 design_store → 11/4 design_gen · claude_bridge → 11/5 로보월드 → 11/6 bridge_node + 4단계 → 11/7 5단계 → 11/8 Next.js. SortTwin 11/8~ · PreWash 11/16~ · IDC 11/23~. 노션 반영 끝.
+- (11/2) **코드를 먼저 읽고 설명을 본다.** 사용자가 "채팅만 보면서 공부 중이라 정확히 이해가 안 된다"고 함. 순서: ① Claude가 볼 줄을 VS Code 링크(`파일:줄`)로 주고 같은 코드를 채팅에도 붙인다 → ② 사용자가 먼저 그 줄을 읽는다(이해 안 돼도 어디가 막히는지만) → ③ 설명을 읽고 막힌 곳이 풀렸는지 본다 → ④ 확인 질문. 코드를 안 보이고 설명만 하지 않는다.
+- (11/3) 일정 사흘 더 밀림(11/1~3 세션에 `_on_connect` 하나). 11/4 mqtt_client 나머지 → 11/5 로보월드 → 11/6 bridge_codec → 11/7 design_store → 11/8 design_gen · claude_bridge → 11/9 bridge_node + 4단계 → 11/10 5단계 → 11/11 Next.js. SortTwin 11/11~ · PreWash 11/19~ · IDC 11/26~.
 
 ---
 
